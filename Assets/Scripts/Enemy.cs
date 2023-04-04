@@ -136,14 +136,16 @@ public class Enemy : Unit
 
         EnemySpawner.instance.EnemyDeadCountPlus();
        
-        yield return null;
-        
         MainCam.instance.CamShakeStart(20, 2f);
 
         if (randIndex == 1)
         {
             Instantiate(item, transform.position, item.transform.rotation);
         }
+
+        transform.position += new Vector3(0f, 20f, 0f);
+
+        yield return new WaitForSeconds(0.5f);
 
         Destroy(gameObject);
     }

@@ -130,6 +130,15 @@ public class Player : Unit
     [SerializeField]
     private GameObject bullet;
 
+    private GameObject curBullet;
+
+    private GameObject targetObj;
+
+    [SerializeField]
+    private GameObject skillTestBullet;
+
+    public List<GameObject> skillRangeInEnemys = new List<GameObject>();
+
     [SerializeField]
     private SkillData[] sd;
 
@@ -219,8 +228,28 @@ public class Player : Unit
                 }
                 else if (Input.GetKeyDown(KeyCode.V))
                 {
-                    if (sd[(int)SkillKind.Kaisa].coolTime == 0 && sd[(int)SkillKind.Kaisa].useCount > 0)
+                    if (skillRangeInEnemys.Count > 0) //sd[(int)SkillKind.Kaisa].coolTime == 0 && sd[(int)SkillKind.Kaisa].useCount > 0 &&
                     {
+                        WaitForSeconds delay = new WaitForSeconds(0.05f);
+                        int targetIndex = 0;
+                        GameObject[] targetObjs = new GameObject[skillRangeInEnemys.Count];
+
+                        for (int i = 0; i < skillRangeInEnemys.Count; i++)
+                        {
+                            targetObjs[i] = skillRangeInEnemys[i];
+                        }
+
+                        for (int i = 0; i < 20; i++)
+                        {
+                            curBullet = Instantiate(skillTestBullet, transform.position, Quaternion.identity);
+
+                            curBullet.GetComponent<BezierBullet>().StartCoroutine(curBullet.GetComponent<BezierBullet>().BezierMove(targetObjs[targetIndex].transform.position));
+
+                            targetIndex = (targetIndex + 1) >= targetObjs.Length ? 0 : targetIndex + 1;
+
+                            yield return delay;
+                        }
+
                         sd[(int)SkillKind.Kaisa].useCount--;
                         sm.skillUseCountTexts[(int)SkillKind.Kaisa].text = $"{sd[(int)SkillKind.Kaisa].useCount}";
 
