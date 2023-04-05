@@ -25,7 +25,7 @@ public class BezierBullet : MonoBehaviour
 
             transform.position = Vector3.Lerp(lerpVectors[3], lerpVectors[4], curMoveIndex / 1f);
 
-            curMoveIndex += Time.deltaTime * 2f;
+            curMoveIndex += Time.deltaTime * 3.5f;
             yield return null;
         }
 

@@ -233,6 +233,7 @@ public class Player : Unit
                         WaitForSeconds delay = new WaitForSeconds(0.05f);
                         int targetIndex = 0;
                         GameObject[] targetObjs = new GameObject[skillRangeInEnemys.Count];
+                        Vector3 curTargetPos = Vector3.zero;
 
                         for (int i = 0; i < skillRangeInEnemys.Count; i++)
                         {
@@ -243,7 +244,9 @@ public class Player : Unit
                         {
                             curBullet = Instantiate(skillTestBullet, transform.position, Quaternion.identity);
 
-                            curBullet.GetComponent<BezierBullet>().StartCoroutine(curBullet.GetComponent<BezierBullet>().BezierMove(targetObjs[targetIndex].transform.position));
+                            curTargetPos = targetObjs[targetIndex] == null ? transform.position : targetObjs[targetIndex].transform.position;
+
+                            curBullet.GetComponent<BezierBullet>().StartCoroutine(curBullet.GetComponent<BezierBullet>().BezierMove(curTargetPos));
 
                             targetIndex = (targetIndex + 1) >= targetObjs.Length ? 0 : targetIndex + 1;
 

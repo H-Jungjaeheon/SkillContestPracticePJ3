@@ -30,7 +30,6 @@ public class RankingManager : MonoBehaviour
     {
         gm = GameManager.instance;
         curScoreText.text = $"Score:{gm.Score}";
-        RankingTextUpdate();
     }
 
     public void InputName()
