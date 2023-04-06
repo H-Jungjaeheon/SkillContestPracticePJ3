@@ -231,24 +231,38 @@ public class Player : Unit
                     if (skillRangeInEnemys.Count > 0) //sd[(int)SkillKind.Kaisa].coolTime == 0 && sd[(int)SkillKind.Kaisa].useCount > 0 &&
                     {
                         WaitForSeconds delay = new WaitForSeconds(0.05f);
+
                         int targetIndex = 0;
+
                         GameObject[] targetObjs = new GameObject[skillRangeInEnemys.Count];
+                        Vector3[] targetPoses = new Vector3[skillRangeInEnemys.Count];
+
                         Vector3 curTargetPos = Vector3.zero;
 
                         for (int i = 0; i < skillRangeInEnemys.Count; i++)
                         {
                             targetObjs[i] = skillRangeInEnemys[i];
                         }
-
+                        
                         for (int i = 0; i < 20; i++)
                         {
                             curBullet = Instantiate(skillTestBullet, transform.position, Quaternion.identity);
 
-                            curTargetPos = targetObjs[targetIndex] == null ? transform.position : targetObjs[targetIndex].transform.position;
+                            if (targetObjs[targetIndex] == null)
+                            {
+                                print("이게 맞는데");
+                                curTargetPos = targetPoses[targetIndex];
+                            }
+                            else
+                            {
+                                print("왜 이거 실행?");
+                                curTargetPos = targetObjs[targetIndex].transform.position;
+                                targetPoses[targetIndex] = targetObjs[targetIndex].transform.position;
+                            }
 
                             curBullet.GetComponent<BezierBullet>().StartCoroutine(curBullet.GetComponent<BezierBullet>().BezierMove(curTargetPos));
 
-                            targetIndex = (targetIndex + 1) >= targetObjs.Length ? 0 : targetIndex + 1;
+                            targetIndex = (targetIndex + 1) >= skillRangeInEnemys.Count ? 0 : targetIndex + 1;
 
                             yield return delay;
                         }
