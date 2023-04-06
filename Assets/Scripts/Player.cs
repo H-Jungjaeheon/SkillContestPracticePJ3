@@ -155,6 +155,14 @@ public class Player : Unit
 
     IEnumerator shieldEndCoroutine;
 
+    [SerializeField]
+    private GameObject[] targetObjs;
+    
+    [SerializeField]
+    private Vector3[] targetPoses;
+
+    private Vector3 curTargetPos;
+
     private void Awake()
     {
         if (instance == null)
@@ -234,10 +242,8 @@ public class Player : Unit
 
                         int targetIndex = 0;
 
-                        GameObject[] targetObjs = new GameObject[skillRangeInEnemys.Count];
-                        Vector3[] targetPoses = new Vector3[skillRangeInEnemys.Count];
-
-                        Vector3 curTargetPos = Vector3.zero;
+                        targetObjs = new GameObject[skillRangeInEnemys.Count];
+                        targetPoses = new Vector3[skillRangeInEnemys.Count];
 
                         for (int i = 0; i < skillRangeInEnemys.Count; i++)
                         {
@@ -250,19 +256,17 @@ public class Player : Unit
 
                             if (targetObjs[targetIndex] == null)
                             {
-                                print("이게 맞는데");
                                 curTargetPos = targetPoses[targetIndex];
                             }
                             else
                             {
-                                print("왜 이거 실행?");
                                 curTargetPos = targetObjs[targetIndex].transform.position;
                                 targetPoses[targetIndex] = targetObjs[targetIndex].transform.position;
                             }
 
                             curBullet.GetComponent<BezierBullet>().StartCoroutine(curBullet.GetComponent<BezierBullet>().BezierMove(curTargetPos));
 
-                            targetIndex = (targetIndex + 1) >= skillRangeInEnemys.Count ? 0 : targetIndex + 1;
+                            targetIndex = (targetIndex + 1) == targetObjs.Length ? 0 : targetIndex + 1;
 
                             yield return delay;
                         }
